@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aspnet-core-app-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aspnet-core-app
+  template:
+    metadata:
+      labels:
+        app: aspnet-core-app
+    spec:
+      containers:
+      - name: aspnetapp-image
+        image: "mcr.microsoft.com/dotnet/core/samples:aspnetapp"
+        ports:
+        - containerPort: 80
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aspnet-core-app-service
+spec:
+  selector:
+    app: aspnet-core-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+# AGIC
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aspnet-core-app-ingress-agic
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: aspnet-core-app-service
+            port:
+              number: 80
+---
+# NGINX
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: aspnet-core-app-nginx-ingress-nginx
+#   annotations:
+#     kubernetes.io/ingress.class: nginx
+#     nginx.ingress.kubernetes.io/rewrite-target: /
+# spec:
+#   rules:
+#   - host: 
+#   - http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: aspnet-core-app-service
+#             port:
+#               number: 80
+
+#
+# For reference: https://docs.microsoft.com/en-us/azure/application-gateway/ingress-controller-troubleshoot

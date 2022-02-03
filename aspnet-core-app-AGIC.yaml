@@ -51,5 +51,5 @@ spec:
               number: 80
 #
 # For reference: https://docs.microsoft.com/en-us/azure/application-gateway/ingress-controller-troubleshoot
-# Recommend creating namespace for app i.e.: kubectl create namespace aspnet-core-app
-# Deploy app: kubectl apply -f https://raw.githubusercontent.com/Buchatech/aspnet-core-app/main/aspnet-core-app.yaml
+# Recommend creating namespace for app i.e.: kubectl create namespace aspnet-core-app-<INSERT CORRECT INGRESS TYPE i.e.: aspnet-core-app-agic/aspnet-core-app-nginx>
+# Deploy app: kubectl apply -f https://raw.githubusercontent.com/Buchatech/aspnet-core-app/main/aspnet-core-app.yaml -n <INSERT CORRECT NAMESPACE>
